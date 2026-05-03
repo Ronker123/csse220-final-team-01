@@ -1,5 +1,6 @@
 package finalProject2026;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,17 +11,21 @@ public class Display extends JPanel implements Runnable{
 	
 	private KeyBinds kb = new KeyBinds();
 	private Thread gameThread; 
+	private GameState gameState;
+	private Entities entities;
 	
 	public Display() {
 		this.addKeyListener(kb);
 		this.setFocusable(true);
-		this.setPreferredSize(new Dimension(200, 200));
+		this.setPreferredSize(new Dimension(800, 600));
+//		this.setBackground(new Color(74, 100, 74));
 		
-		run();
+		this.gameState = new GameState();
+		this.entities = new Entities(this.gameState);
 	}
 	
 	public void startGameThread() {
-		gameThread = new Thread();
+		gameThread = new Thread(this);
 		gameThread.start();
 	}
 	
@@ -31,7 +36,8 @@ public class Display extends JPanel implements Runnable{
 		
 		Graphics2D g2 = (Graphics2D)g;
 		
-		
+		this.gameState.draw(g2);
+		this.entities.draw(g2);
 		
 	}
 
@@ -60,13 +66,16 @@ public class Display extends JPanel implements Runnable{
 				//Queues the next frame to occur for a 60th of a second.
 				nextDrawTime+=timeInterval;
 			}
-			catch(Exception e) {}
+			catch(Exception e) {System.out.println(e);}
 		}
 		
 	}
 	
 	//Handles everything that needs be update, whether it is a level, entities, or menus
 	private void update() {
+		
+		this.gameState.update();
+		this.entities.update();
 		
 	}
 
