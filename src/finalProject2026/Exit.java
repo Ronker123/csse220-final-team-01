@@ -1,35 +1,48 @@
 package finalProject2026;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 public class Exit {
-	
-	private int startX; //vertical position
-	private int startY; //horizontal position 
-	BufferedImage sprite; 
-	
-	
-	public Exit(int startX, int startY) {
-		
-		this.startX = startX;
-		this.startY = startY; 
-		
-		try {
-			sprite = ImageIO.read(Coin.class.getResource("Coin.png"));
-		} catch (IOException | IllegalArgumentException e) {
-			sprite = null;
-		}
-	}
-	
-	public int get_StartX() {
-		return startX; 
-	}
-	
-	public int get_StartY() {
-		return startY; 
-	}
+    private int x, y;
+    private playerLevelManagerMediator mediator;
+    
+    private BufferedImage sprite;
+    private final int SPRITE_SIZE = 40; 
 
+    public Exit(int startX, int startY, playerLevelManagerMediator mediator) {
+        this.x = startX;
+        this.y = startY;
+        this.mediator = mediator;
+        
+        loadSprite();
+        this.mediator.setPlayerPosition(this.x, this.y);
+    }
+
+    private void loadSprite() {
+        try {
+        	sprite = ImageIO.read(getClass().getResourceAsStream("/Exit.png"));
+        } catch (IOException e) {
+            System.out.println("Error: Could not find player sprite file.");
+            e.printStackTrace();
+        }
+    }
+
+    public void draw(Graphics g) {
+        if (sprite != null) {
+            g.drawImage(sprite, x, y, SPRITE_SIZE, SPRITE_SIZE, null);
+        } else {
+            g.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
+        }
+    }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
+
+    public void update() {
+        mediator.setPlayerPosition(this.x, this.y);
+    }
 }
