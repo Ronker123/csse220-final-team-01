@@ -1,4 +1,4 @@
-package model;
+package finalProject2026;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

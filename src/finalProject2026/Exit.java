@@ -1,23 +1,18 @@
-package model;
+package finalProject2026;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-/**
- * A coin that the player picks up to open the exit. 
- */
-
-public class Coin {
+public class Exit {
 	
 	private int startX; //vertical position
 	private int startY; //horizontal position 
 	BufferedImage sprite; 
 	
 	
-	public Coin(int startX, int startY) {
+	public Exit(int startX, int startY) {
 		
 		this.startX = startX;
 		this.startY = startY; 
@@ -27,7 +22,6 @@ public class Coin {
 		} catch (IOException | IllegalArgumentException e) {
 			sprite = null;
 		}
-		
 	}
 	
 	public int get_StartX() {
