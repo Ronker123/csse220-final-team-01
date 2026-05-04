@@ -18,9 +18,13 @@ public class Level {
 		return state;
 	}
 	
-	public void draw(Graphics2D g2) {
+	public void draw(Graphics2D g2, int pause) {		
 		for(Enviorment tile : tiles) {
 			tile.draw(g2);
 		}
+	}
+	
+	public Enviorment getTile(int i) {
+		return tiles[i];
 	}
 }

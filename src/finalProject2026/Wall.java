@@ -12,6 +12,7 @@ public class Wall extends Enviorment{
 	
 	public Wall(Type type, int x_position, int y_position, int tileSize) {
 		super(type, x_position, y_position, tileSize);
+		super.canBeWalkedOn = false;
 		this.type=type;
 	}
 	

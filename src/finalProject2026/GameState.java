@@ -6,11 +6,14 @@ public class GameState {
 	
 	private State state;
 	private LevelManager level;
+	private playerLevelManagerMediator plmm;
 	
 	public GameState() {
 //		this.state = State.MAINMENU;
+		plmm = new playerLevelManagerMediator();
+		
 		this.state = State.LEVELONE;
-		this.level = new LevelManager();
+		this.level = new LevelManager(plmm);
 	}
 	
 	public void update() {
@@ -23,5 +26,9 @@ public class GameState {
 	
 	public State getState() {
 		return state;
+	}
+	
+	public playerLevelManagerMediator getPLMM() {
+		return plmm;
 	}
 }

@@ -10,6 +10,7 @@ public class Enviorment {
 	private int x_position;
 	private int y_position;
 	private int tileSize;
+	protected boolean canBeWalkedOn;
 	
 	public Type type;
 	private BufferedImage displayImage;
@@ -39,5 +40,9 @@ public class Enviorment {
 	
 	public void draw(Graphics2D g2) {
 		g2.drawImage(displayImage, x_position, y_position, tileSize, (int)(tileSize*1.5), null);
+	}
+	
+	public boolean getCanBeWalkedOn() {
+		return canBeWalkedOn;
 	}
 }
