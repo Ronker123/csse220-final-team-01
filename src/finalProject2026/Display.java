@@ -7,22 +7,22 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-public class Display extends JPanel implements Runnable{
-	
-	private KeyBinds kb = new KeyBinds();
-	private Thread gameThread; 
-	private GameState gameState;
-	private Entities entities;
-	
-	public Display() {
-		this.addKeyListener(kb);
-		this.setFocusable(true);
-		this.setPreferredSize(new Dimension(800, 600));
+public class Display extends JPanel implements Runnable {
+    
+    private KeyHandler kb = new KeyHandler(); 
+    private Thread gameThread; 
+    private GameState gameState;
+    private Entities entities;
+    
+    public Display() {
+        this.addKeyListener(kb); 
+        this.setFocusable(true);
+        this.setPreferredSize(new Dimension(800, 600));
 //		this.setBackground(new Color(74, 100, 74));
 		
-		this.gameState = new GameState();
-		this.entities = new Entities(this.gameState);
-	}
+        this.gameState = new GameState();
+        this.entities = new Entities(this.gameState, kb); 
+    }
 	
 	public void startGameThread() {
 		gameThread = new Thread(this);

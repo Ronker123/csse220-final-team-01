@@ -1,16 +1,15 @@
-package finalProject2026;
 
+package finalProject2026;
 import java.awt.Graphics2D;
 
 public class Entities {
-	
-	private GameState gameState;
-	private EntityManager entityManager;
-	
-	public Entities(GameState gs) {
-		this.gameState = gs;
-		entityManager = new EntityManager(gameState.getState(), gameState.getPLMM());
-	}
+    private GameState gameState;
+    private EntityManager entityManager;
+    
+    public Entities(GameState gs, KeyHandler kh) {
+        this.gameState = gs;
+        entityManager = new EntityManager(gameState.getState(), gameState.getPLMM(), kh);
+    }
 	
 	public void update() {
 		entityManager.update(gameState.getState());

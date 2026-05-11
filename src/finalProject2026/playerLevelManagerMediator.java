@@ -23,20 +23,10 @@ public class playerLevelManagerMediator {
 	}
 	
 	private void adjacentTiles() {
-		try{tiles[0]=level.getTile(playerX+(playerY-1)*15);} catch(Exception e) {tiles[0]=null;}
-		try{tiles[1]=level.getTile(playerX+1+playerY*15);} catch(Exception e) {tiles[1]=null;}
-		try{tiles[2]=level.getTile(playerX+(playerY+1)*15);} catch(Exception e) {tiles[2]=null;}
-		try{tiles[3]=level.getTile(playerX-1+playerY*15);} catch(Exception e) {tiles[3]=null;}
-	}
-	
-	public boolean canGoLeft() {
-		if(tiles[2]!=null) return tiles[2].getCanBeWalkedOn();
-		return false;
-	}
-	
-	public boolean canGoRight() {
-		if(tiles[1]!=null) return tiles[1].getCanBeWalkedOn();
-		return false;
+		try{tiles[0]=level.getTile(playerX+(playerY-1)*20); System.out.println(tiles[0].getClass());} catch(Exception e) {tiles[0]=null;}
+		try{tiles[1]=level.getTile(playerX+1+playerY*20);} catch(Exception e) {tiles[1]=null;}
+		try{tiles[2]=level.getTile(playerX+(playerY+1)*20);} catch(Exception e) {tiles[2]=null;}
+		try{tiles[3]=level.getTile(playerX-1+playerY*20);} catch(Exception e) {tiles[3]=null;}
 	}
 	
 	public boolean canGoUP() {
@@ -45,7 +35,17 @@ public class playerLevelManagerMediator {
 	}
 	
 	public boolean canGoDown() {
+		if(tiles[2]!=null) return tiles[2].getCanBeWalkedOn();
+		return false;
+	}
+	
+	public boolean canGoLeft() {
 		if(tiles[3]!=null) return tiles[3].getCanBeWalkedOn();
+		return false;
+	}
+	
+	public boolean canGoRight() {
+		if(tiles[1]!=null) return tiles[1].getCanBeWalkedOn();
 		return false;
 	}
 	
