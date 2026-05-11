@@ -18,13 +18,25 @@ public class Level {
 		return state;
 	}
 	
-	public void draw(Graphics2D g2, int pause) {		
+	public void draw(Graphics2D g2) {	
 		for(Enviorment tile : tiles) {
 			tile.draw(g2);
 		}
 	}
 	
+	public void drawFGTiles(Graphics2D g2, int layer) {
+		for(Enviorment tile : tiles) {
+			if(tile.getId() >= layer*20 && tile.getId() < layer*40+20 && !tile.getCanBeWalkedOn()) {
+				tile.draw(g2);
+			}
+		}
+	}
+	
 	public Enviorment getTile(int i) {
 		return tiles[i];
+	}
+	
+	public int getEnviormentSize() {
+		return tiles.length;
 	}
 }
