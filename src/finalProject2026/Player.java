@@ -69,15 +69,15 @@ public class Player {
     public void update() {
     	if (keyH == null) return;
     	
+//    	System.out.println(mediator.canGoUP());
+    	
     	if (keyH.keys[KeyEvent.VK_W] && mediator.canGoUP()) {
             this.y -= speed;
-        }
-    	if (keyH.keys[KeyEvent.VK_S] && mediator.canGoDown()) {
+        }if (keyH.keys[KeyEvent.VK_S] && mediator.canGoDown()) {
             this.y += speed;
         }if (keyH.keys[KeyEvent.VK_A] && mediator.canGoLeft()) {
             this.x -= speed;
-        }
-        if (keyH.keys[KeyEvent.VK_D] && mediator.canGoRight()) {
+        }if (keyH.keys[KeyEvent.VK_D] && mediator.canGoRight()) {
             this.x += speed;
         }
     	
