@@ -43,6 +43,6 @@ public class Coin {
     public int getY() { return y; }
 
     public void update() {
-        mediator.setPlayerPosition(this.x, this.y);
+//        mediator.setPlayerPosition(this.x, this.y);
     }
 }

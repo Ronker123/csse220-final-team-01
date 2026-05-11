@@ -79,6 +79,6 @@ public class Zombie {
 //            this.x += speed;
 //        }
 
-        mediator.setPlayerPosition(this.x, this.y);
+//        mediator.setPlayerPosition(this.x, this.y);
     }
 }

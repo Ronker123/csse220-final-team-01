@@ -23,10 +23,10 @@ public class playerLevelManagerMediator {
 	}
 	
 	private void adjacentTiles() {
-		try{tiles[0]=level.getTile(playerX+(playerY-1)*15);} catch(Exception e) {tiles[0]=null;}
-		try{tiles[1]=level.getTile(playerX+1+playerY*15);} catch(Exception e) {tiles[1]=null;}
-		try{tiles[2]=level.getTile(playerX+(playerY+1)*15);} catch(Exception e) {tiles[2]=null;}
-		try{tiles[3]=level.getTile(playerX-1+playerY*15);} catch(Exception e) {tiles[3]=null;}
+		try{tiles[0]=level.getTile(playerX+(playerY-1)*20); System.out.println(tiles[0].getClass());} catch(Exception e) {tiles[0]=null;}
+		try{tiles[1]=level.getTile(playerX+1+playerY*20);} catch(Exception e) {tiles[1]=null;}
+		try{tiles[2]=level.getTile(playerX+(playerY+1)*20);} catch(Exception e) {tiles[2]=null;}
+		try{tiles[3]=level.getTile(playerX-1+playerY*20);} catch(Exception e) {tiles[3]=null;}
 	}
 	
 	public boolean canGoUP() {
