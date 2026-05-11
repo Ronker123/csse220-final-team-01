@@ -27,4 +27,8 @@ public class Level {
 	public Enviorment getTile(int i) {
 		return tiles[i];
 	}
+	
+	public int getEnviormentSize() {
+		return tiles.length;
+	}
 }

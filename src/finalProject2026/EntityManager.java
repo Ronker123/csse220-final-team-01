@@ -19,10 +19,10 @@ public class EntityManager {
 	    this.plmm = plmm;
 	    this.KH = KH; 
 	    
-	    this.player = new Player(200, 200, this.plmm, KH); 
-	    this.zombie = new Zombie(50, 20, this.plmm);
-	    this.coin = new Coin(100, 100, this.plmm);
-	    this.exit = new Exit(300, 300, this.plmm);
+	    this.player = new Player(40, 0, this.plmm, KH); 
+//	    this.zombie = new Zombie(50, 20, this.plmm);
+//	    this.coin = new Coin(100, 100, this.plmm);
+//	    this.exit = new Exit(300, 300, this.plmm);
 	}
 
 	public void update(State state) {

@@ -9,7 +9,10 @@ import java.io.IOException;
 
 public class Player {
     private int x, y;
+    private int tarX, tarY;
     private int speed = 5;
+    private int frameCount = 0;
+    
     private playerLevelManagerMediator mediator;
     private KeyHandler keyH; 
     
@@ -19,6 +22,10 @@ public class Player {
     public Player(int startX, int startY, playerLevelManagerMediator mediator, KeyHandler keyH) {
         this.x = startX;
         this.y = startY;
+        
+        this.tarX = startX;
+        this.tarY = startY;
+        
         this.mediator = mediator;
         this.keyH = keyH; 
         
@@ -43,47 +50,50 @@ public class Player {
         }
     }
 
-    public void move(String direction) {
-        
-        switch (direction.toUpperCase()) {
-            case "UP":
-                if (mediator.canGoUP()) y -= speed;
-                break;
-            case "DOWN":
-                if (mediator.canGoDown()) y += speed;
-                break;
-            case "LEFT":
-                if (mediator.canGoLeft()) x -= speed;
-                break;
-            case "RIGHT":
-                if (mediator.canGoRight()) x += speed;
-                break;
-        }
-
-        mediator.setPlayerPosition(this.x, this.y);
-    }
-
     public int getX() { return x; }
     public int getY() { return y; }
 
     public void update() {
     	if (keyH == null) return;
-    	
-//    	System.out.println(mediator.canGoUP());
-    	
-    	if (keyH.keys[KeyEvent.VK_W] && mediator.canGoUP()) {
-            this.y -= speed;
-        }if (keyH.keys[KeyEvent.VK_S] && mediator.canGoDown()) {
-            this.y += speed;
-        }if (keyH.keys[KeyEvent.VK_A] && mediator.canGoLeft()) {
-            this.x -= speed;
-        }if (keyH.keys[KeyEvent.VK_D] && mediator.canGoRight()) {
-            this.x += speed;
-        }
-    	
 
-        mediator.setPlayerPosition(this.x, this.y);
+    	mediator.setPlayerPosition(this.tarX, this.tarY);
+    	
+    	moveToTarget();
+    	setTargetPos();
     }
+    
+    private void moveToTarget() {
+		x += x < tarX ? 5 : 0;
+		x -= x > tarX ? 5 : 0;
+		y -= y > tarY ? 5 : 0;
+		y += y < tarY ? 5 : 0;
+	}
+    
+    private void setTargetPos() {
+		frameCount++;
+		
+		if(frameCount != 1 && frameCount < 15) return;
+		if(frameCount%8 != 1) return;
+		
+		if(keyH.keys[KeyEvent.VK_W] && mediator.canMoveTo("UP")) {
+			tarY-=40;
+			return;
+		}
+		if(keyH.keys[KeyEvent.VK_D] && mediator.canMoveTo("RIGHT")) {
+			tarX+=40;
+			return;
+		}
+		if(keyH.keys[KeyEvent.VK_S] && mediator.canMoveTo("DOWN")) {
+			tarY+=40;
+			return;
+		}
+		if(keyH.keys[KeyEvent.VK_A] && mediator.canMoveTo("LEFT")) {
+			tarX-=40;
+			return;
+		}
+		
+		frameCount = 0;
+	}
     
     public boolean hasKeys() {
         return keyH != null;

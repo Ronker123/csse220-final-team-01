@@ -10,17 +10,19 @@ public class Enviorment {
 	private int x_position;
 	private int y_position;
 	private int tileSize;
+	private int id;
 	protected boolean canBeWalkedOn;
 	
 	public Type type;
 	private BufferedImage displayImage;
 	
-	public Enviorment(Type type, int x_position, int y_position, int tileSize) {
+	public Enviorment(Type type, int x_position, int y_position, int tileSize, int id) {
 		setDisplayImage(type);
 		this.type = type;
 		this.x_position = x_position;
 		this.y_position = y_position;
 		this.tileSize = tileSize;
+		this.id = id;
 	}
 	
 	private void setDisplayImage(Type type) {
@@ -44,5 +46,9 @@ public class Enviorment {
 	
 	public boolean getCanBeWalkedOn() {
 		return canBeWalkedOn;
+	}
+	
+	public int getId() {
+		return id;
 	}
 }

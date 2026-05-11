@@ -10,8 +10,8 @@ public class Wall extends Enviorment{
 	
 	private Type type;
 	
-	public Wall(Type type, int x_position, int y_position, int tileSize) {
-		super(type, x_position, y_position, tileSize);
+	public Wall(Type type, int x_position, int y_position, int tileSize, int id) {
+		super(type, x_position, y_position, tileSize, id);
 		super.canBeWalkedOn = false;
 		this.type=type;
 	}

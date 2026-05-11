@@ -101,8 +101,9 @@ public class LevelManager {
 			int x = Integer.parseInt(tileInformation[1]);
 			int y = Integer.parseInt(tileInformation[2]);
 			int tileSize = Integer.parseInt(tileInformation[3]);
+			int id = Integer.parseInt(tileInformation[4]);
 			
-			tiles[(int)((i-1)/2)+floorDataArray.length/2] = new Wall(type, x, y, tileSize);
+			tiles[(int)((i-1)/2)+floorDataArray.length/2] = new Wall(type, x, y, tileSize, id);
 		}
 		
 		return tiles;
