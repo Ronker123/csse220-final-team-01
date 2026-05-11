@@ -1,7 +1,7 @@
 package finalProject2026;
 
 import java.awt.event.*;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -42,12 +42,14 @@ public class Player {
         }
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics2D g2) {
         if (sprite != null) {
-            g.drawImage(sprite, x, y, SPRITE_SIZE, SPRITE_SIZE, null);
+            g2.drawImage(sprite, x, y, SPRITE_SIZE, SPRITE_SIZE, null);
         } else {
-            g.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
+            g2.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
         }
+        
+        mediator.drawForeGroundTiles(g2);
     }
 
     public int getX() { return x; }

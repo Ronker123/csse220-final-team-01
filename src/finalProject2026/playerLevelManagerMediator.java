@@ -1,5 +1,7 @@
 package finalProject2026;
 
+import java.awt.Graphics2D;
+
 public class playerLevelManagerMediator {
 	
 	private Level level;
@@ -10,6 +12,10 @@ public class playerLevelManagerMediator {
 	
 	public void setLevel(Level level) {
 		this.level = level;
+	}
+	
+	public void drawForeGroundTiles(Graphics2D g2) {
+		level.drawFGTiles(g2, playerY+1);
 	}
 	
 	public void setPlayerPosition(int x, int y) {
@@ -103,7 +109,7 @@ public class playerLevelManagerMediator {
 	}
 	
 	public int getRow() {
-		return playerY;
+		return playerY+1;
 	}
 }
 	

@@ -28,7 +28,7 @@ public class LevelManager {
 	}
 	
 	public void draw(Graphics2D g2, State state) {
-		if(currentState == state) currentDisplayLevel.draw(g2, plmm.getRow());
+		if(currentState == state) currentDisplayLevel.draw(g2);
 	}
 	
 	public void update(State state) {
