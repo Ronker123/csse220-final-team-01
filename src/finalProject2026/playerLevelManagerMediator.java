@@ -15,6 +15,8 @@ public class playerLevelManagerMediator {
 	}
 	
 	public void drawForeGroundTiles(Graphics2D g2) {
+		if(level == null)return;
+		
 		level.drawFGTiles(g2, playerY+1);
 	}
 	

@@ -15,10 +15,9 @@ public class LevelManager {
 	private Level currentDisplayLevel;
 	private State currentState;
 	private playerLevelManagerMediator plmm;
+	private Menu menu;
 	
-	private BufferedImage tempImage;
-	
-	public LevelManager(playerLevelManagerMediator plmm) {
+	public LevelManager(playerLevelManagerMediator plmm, MouseHandler mb) {
 		File levelStorage = new File("LevelStorage.txt");		
 		try (Scanner lvlScanner = new Scanner(levelStorage)){
 			while (lvlScanner.hasNextLine()) {
@@ -31,25 +30,31 @@ public class LevelManager {
 		
 		this.plmm = plmm;
 		
-		try {
-			tempImage = ImageIO.read(getClass().getResource("menu template 4.png"));
-		}
-		catch(Exception e) {System.out.println(e);}
+		menu = new Menu(mb);
 	}
 	
 	public void draw(Graphics2D g2, State state) {
-		if(currentState == state) currentDisplayLevel.draw(g2);
-		g2.drawImage(tempImage, 0, 0, 1920, 1080, null);
+		if(currentDisplayLevel != null) currentDisplayLevel.draw(g2);
+		menu.draw(g2);
 	}
 	
 	public void update(State state) {
 		if(state!=currentState) {
+			menu.update(state);
 			levels.forEach(n -> {if(n.getState()==state){
-				currentState=state;
 				currentDisplayLevel=n;
 				plmm.setLevel(currentDisplayLevel);
+			}
+			else{
+				currentDisplayLevel = null;
+				plmm.setLevel(currentDisplayLevel);
 			}});
+			currentState=state;
 		}
+	}
+	
+	public State getNewState() {
+		return menu.getNewState();
 	}
 	
 	private Type toType(String data) {

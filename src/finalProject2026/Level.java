@@ -26,7 +26,7 @@ public class Level {
 	
 	public void drawFGTiles(Graphics2D g2, int layer) {
 		for(Enviorment tile : tiles) {
-			if(tile.getId() >= layer*23 && tile.getId() < layer*46+20 && !tile.getCanBeWalkedOn()) {
+			if(tile.getId() >= layer*23 && tile.getId() < layer*24 && !tile.getCanBeWalkedOn()) {
 				tile.draw(g2);
 			}
 		}
