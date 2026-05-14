@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 
 import javax.swing.JPanel;
+
 
 public class Display extends JPanel implements Runnable {
     
@@ -17,7 +19,8 @@ public class Display extends JPanel implements Runnable {
     public Display() {
         this.addKeyListener(kb); 
         this.setFocusable(true);
-        this.setPreferredSize(new Dimension(800, 600));
+        this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
+//      this.setPreferredSize(new Dimension(800, 600));
 //		this.setBackground(new Color(74, 100, 74));
 		
         this.gameState = new GameState();

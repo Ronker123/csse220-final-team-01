@@ -1,10 +1,13 @@
 package finalProject2026;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 public class LevelManager {
 	
@@ -12,6 +15,8 @@ public class LevelManager {
 	private Level currentDisplayLevel;
 	private State currentState;
 	private playerLevelManagerMediator plmm;
+	
+	private BufferedImage tempImage;
 	
 	public LevelManager(playerLevelManagerMediator plmm) {
 		File levelStorage = new File("LevelStorage.txt");		
@@ -25,10 +30,16 @@ public class LevelManager {
 		} catch(Exception e) {System.out.println(e);}
 		
 		this.plmm = plmm;
+		
+		try {
+			tempImage = ImageIO.read(getClass().getResource("menu template 4.png"));
+		}
+		catch(Exception e) {System.out.println(e);}
 	}
 	
 	public void draw(Graphics2D g2, State state) {
 		if(currentState == state) currentDisplayLevel.draw(g2);
+		g2.drawImage(tempImage, 0, 0, 1920, 1080, null);
 	}
 	
 	public void update(State state) {
@@ -49,6 +60,24 @@ public class LevelManager {
 			return Type.GRASSTILE;
 		case "GRASSGROUND":
 			return Type.GRASSGROUND;
+		case "STONE":
+			return Type.STONE;
+		case "STONETILE":
+			return Type.STONETILE;
+		case "STONEGROUND":
+			return Type.STONEGROUND;
+		case "SANDSTONE":
+			return Type.SANDSTONE;
+		case "SANDSTONETILE":
+			return Type.SANDSTONETILE;
+		case "SANDSTONEGROUND":
+			return Type.SANDSTONEGROUND;
+		case "MAGMA":
+			return Type.MAGMA;
+		case "MAGMATILE":
+			return Type.MAGMATILE;
+		case "MAGMAGROUND":
+			return Type.MAGMAGROUND;
 		}
 	System.out.println("Type: "+data+" does not exist. Thrown from LevelManager.java ln 54");
 	System.exit(0);
