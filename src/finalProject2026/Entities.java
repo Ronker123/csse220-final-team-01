@@ -8,7 +8,7 @@ public class Entities {
     
     public Entities(GameState gs, KeyHandler kh) {
         this.gameState = gs;
-        entityManager = new EntityManager(gameState.getState(), gameState.getPLMM(), kh);
+        entityManager = new EntityManager(gameState.getState(), kh);
     }
 	
 	public void update() {

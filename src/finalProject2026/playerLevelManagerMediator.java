@@ -5,39 +5,63 @@ import java.awt.Graphics2D;
 public class playerLevelManagerMediator {
 	
 	private static Level level;
+	private static Graphics2D graphics;
 //	private int playerX;
 //	private int playerY=4;
-	private static Enviorment[] tiles = new Enviorment[4];
-	private boolean drawPlayer = false;
+//	private Enviorment[] tiles = new Enviorment[4];
+//	private boolean drawPlayer = false;
 	
-	public static void setLevel(Level level) {
-		playerLevelManagerMediator.level = level;
+	public static void setLevel(Level l) {
+		level = l;
 	}
 	
-	public static void drawForeGroundTiles(Graphics2D g2, int playerY, int playerX) {
-		
-		if (level == null) {
-	        return; 
-	    }
-		
-	    if (level != null) {
-	        level.drawFGTiles(g2, playerY, playerX);
-	    }
-	}
+//	public static void setGraphicsDisplay(Graphics2D g2) {
+//		graphics = g2;
+//	}
 	
-	public static void setPlayerPosition(int x, int y) {
+	public static void drawForeGroundTiles(Graphics2D g2, int x, int y) {
+		if(level == null)return;
+		
+		int playerX, playerY;
 		
 		// 40 in this context is width and height of the tiles
 		
 		x-=880;
 		y-=120;
-		adjacentTiles(x, y);
+		
+		playerX=x-x%40;
+		playerY=y-y%40;
+		
+		playerX/=40;
+		playerY/=40;
+		
+		level.drawFGTiles(g2, playerY+1, playerX);
+//		System.out.println(playerX +" " + playerY+1);
 	}
 	
-	private static void adjacentTiles(int playerX, int playerY) {
+	public static Enviorment[] setPlayerPosition(int x, int y) {
 		
-		if(level == null) return;
+		int playerX, playerY;
+		
+		// 40 in this context is width and height of the tiles
+		
+		x-=880;
+		y-=120;
+		
+		playerX=x-x%40;
+		playerY=y-y%40;
+		
+		playerX/=40;
+		playerY/=40;
+		
+		return adjacentTiles(playerX, playerY);
+	}
 	
+	private static Enviorment[] adjacentTiles(int playerX, int playerY) {
+		
+		Enviorment[] tiles = new Enviorment[4];
+		
+		if(level == null) return tiles;
 		
 		// 23 in this context is how many tiles wide the screen is
 		int rowLength = 23;
@@ -91,10 +115,11 @@ public class playerLevelManagerMediator {
 		if(down == -1) tiles[2] = null;
 		if(left == -1) tiles[3] = null;
 		
+		return tiles;
 	}
 	
 	// Returns walkability for each of the four adjacent tiles.
-	public static boolean canMoveTo(String direction) {
+	public static boolean canMoveTo(String direction, Enviorment[] tiles) {
 		switch(direction) {
 		case "UP":
 			if(tiles[0]!=null) return tiles[0].getCanBeWalkedOn();
@@ -112,8 +137,7 @@ public class playerLevelManagerMediator {
 		return false;
 	}
 	
-	
-	public static boolean isTileWalkable(int x, int y) {
+	public boolean isTileWalkable(int x, int y) {
 	    if (level == null) return false;
 	    
 	    // Snap the requested coordinates to grid

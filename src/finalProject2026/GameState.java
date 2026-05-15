@@ -6,13 +6,10 @@ public class GameState {
 	
 	private State state;
 	private LevelManager levelManager;
-	private playerLevelManagerMediator plmm;
 	
 	public GameState(MouseHandler mb) {
-		plmm = new playerLevelManagerMediator();
-		
 		this.state = State.MAINMENU;
-		this.levelManager = new LevelManager(plmm, mb);
+		this.levelManager = new LevelManager(mb);
 	}
 	
 	public void update() {
@@ -30,9 +27,5 @@ public class GameState {
 	
 	public void setState() {
 		if(levelManager.getNewState() != null) state = levelManager.getNewState();
-	}
-	
-	public playerLevelManagerMediator getPLMM() {
-		return plmm;
 	}
 }

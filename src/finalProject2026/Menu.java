@@ -117,6 +117,9 @@ public class Menu {
 			
 			exit.setSelectable(true);
 			play.setSelectable(true);
+			settings.setSelectable(true);
+			statistics.setSelectable(true);
+			credits.setSelectable(true);
 			
 			pause.setSelectable(false);
 			menu.setSelectable(false);
@@ -142,12 +145,15 @@ public class Menu {
 			pause.setSelectable(true);
 			
 			exit.setSelectable(false);
-			l1.setSelectable(false);
+			play.setSelectable(false);
+			settings.setSelectable(false);
+			statistics.setSelectable(false);
+			credits.setSelectable(false);
 			
-//			buttons[0] = menu;
-//			buttons[1] = nextLevel;
-//			buttons[2] = pause;
-//			buttons[3] = null;
+			buttons[0] = menu;
+			buttons[1] = nextLevel;
+			buttons[2] = pause;
+			buttons[3] = null;
 			break;
 		}
 	}

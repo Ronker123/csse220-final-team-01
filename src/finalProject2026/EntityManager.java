@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 public class EntityManager {
     
     private State state;
-    private playerLevelManagerMediator plmm;
     private KeyHandler KH; 
     
     private Player player;
@@ -13,12 +12,11 @@ public class EntityManager {
 	private Coin coin;
 	private Exit exit;
     
-	public EntityManager(State state, playerLevelManagerMediator plmm, KeyHandler KH) {
+	public EntityManager(State state, KeyHandler KH) {
 	    this.state = state;
-	    this.plmm = plmm;
 	    this.KH = KH; 
 	    
-	    this.player = new Player(920, 840, this.plmm, KH); 
+	    this.player = new Player(920, 160, KH); 
 	    
 //	    int startX, startY;
 //	    boolean isSafe = false;
