@@ -6,12 +6,15 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player {
     private int x, y;
     private int tarX, tarY;
     private int speed = 5;
     private int frameCount = 0;
+    private ArrayList<State> theNoNos = new ArrayList<>(Arrays.asList(State.MAINMENU, State.PAUSED));
     
     private State state;
     
@@ -65,7 +68,7 @@ public class Player {
     	
     	this.state = state;
     	
-    	if (state != State.MAINMENU) {
+    	if (!theNoNos.contains(state)) {
     	mediator.setPlayerPosition(this.tarX, this.tarY);
     	
     	moveToTarget();
