@@ -63,7 +63,7 @@ public class playerLevelManagerMediator {
 		
 		if(level == null) return tiles;
 		
-		// 20 in this context is how many tiles wide the screen is
+		// 23 in this context is how many tiles wide the screen is
 		int rowLength = 23;
 		
 		// Each of these evaluate where the adjacent tile is based on the fact that each level has a long list of the tiles

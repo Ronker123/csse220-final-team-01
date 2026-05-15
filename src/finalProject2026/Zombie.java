@@ -14,7 +14,6 @@ public class Zombie {
     private int speed = 5;
     private int frameCount = 0;
     
-    private playerLevelManagerMediator mediator;
     private Random random = new Random();
     
     private BufferedImage sprite;
@@ -27,10 +26,9 @@ public class Zombie {
         this.tarX = startX;
         this.tarY = startY;
         
-        this.mediator = mediator;
         
         loadSprite();
-        this.mediator.setPlayerPosition(this.x, this.y);
+//        this.mediator.setPlayerPosition(this.x, this.y);
     }
 
     private void loadSprite() {
@@ -49,7 +47,7 @@ public class Zombie {
             g2.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
         }
         
-        mediator.drawForeGroundTiles(g2);
+        playerLevelManagerMediator.drawForeGroundTiles(g2, SPRITE_SIZE, SPRITE_SIZE);
     }
 
     public int getX() { return x; }
@@ -57,7 +55,7 @@ public class Zombie {
 
     public void update() {
         // Update the mediator with the intended destination for collision
-        mediator.setPlayerPosition(this.tarX, this.tarY);
+        playerLevelManagerMediator.setPlayerPosition(this.tarX, this.tarY);
         
         moveToTarget();
         setTargetPos();
@@ -73,24 +71,24 @@ public class Zombie {
     private void setTargetPos() {
         frameCount++;
         
-        if(frameCount != 1 && frameCount < 15) return;
-        if(frameCount % 8 != 1) return;
+//        if(frameCount != 1 && frameCount < 15) return;
+//        if(frameCount % 8 != 1) return;
         
         if (x == tarX && y == tarY) {
             int direction = random.nextInt(4); 
             
             switch (direction) {
                 case 0: // UP
-                    if (mediator.canMoveTo("UP")) tarY -= 40;
+                    if (playerLevelManagerMediator.canMoveTo("UP")) tarY -= 40;
                     break;
                 case 1: // RIGHT
-                    if (mediator.canMoveTo("RIGHT")) tarX += 40;
+                    if (playerLevelManagerMediator.canMoveTo("RIGHT")) tarX += 40;
                     break;
                 case 2: // DOWN
-                    if (mediator.canMoveTo("DOWN")) tarY += 40;
+                    if (playerLevelManagerMediator.canMoveTo("DOWN")) tarY += 40;
                     break;
                 case 3: // LEFT
-                    if (mediator.canMoveTo("LEFT")) tarX -= 40;
+                    if (playerLevelManagerMediator.canMoveTo("LEFT")) tarX -= 40;
                     break;
             }
         }
