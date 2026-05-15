@@ -43,7 +43,7 @@ public class Display extends JPanel implements Runnable {
 		
 		this.gameState.draw(g2);
 		this.entities.draw(g2);
-		
+//		playerLevelManagerMediator.setGraphicsDisplay(g2);
 	}
 
 	@Override

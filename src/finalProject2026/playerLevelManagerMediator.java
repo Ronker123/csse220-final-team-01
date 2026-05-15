@@ -4,23 +4,26 @@ import java.awt.Graphics2D;
 
 public class playerLevelManagerMediator {
 	
-	private Level level;
-	private int playerX;
-	private int playerY=4;
-	private Enviorment[] tiles = new Enviorment[4];
-	private boolean drawPlayer = false;
+	private static Level level;
+	private static Graphics2D graphics;
+//	private int playerX;
+//	private int playerY=4;
+//	private Enviorment[] tiles = new Enviorment[4];
+//	private boolean drawPlayer = false;
 	
-	public void setLevel(Level level) {
-		this.level = level;
+	public static void setLevel(Level l) {
+		level = l;
 	}
 	
-	public void drawForeGroundTiles(Graphics2D g2) {
+//	public static void setGraphicsDisplay(Graphics2D g2) {
+//		graphics = g2;
+//	}
+	
+	public static void drawForeGroundTiles(Graphics2D g2, int x, int y) {
 		if(level == null)return;
 		
-		level.drawFGTiles(g2, playerY+1, playerX);
-	}
-	
-	public void setPlayerPosition(int x, int y) {
+		int playerX, playerY;
+		
 		// 40 in this context is width and height of the tiles
 		
 		x-=880;
@@ -32,12 +35,33 @@ public class playerLevelManagerMediator {
 		playerX/=40;
 		playerY/=40;
 		
-		adjacentTiles();
+		level.drawFGTiles(g2, playerY+1, playerX);
+//		System.out.println(playerX +" " + playerY+1);
 	}
 	
-	private void adjacentTiles() {
+	public static Enviorment[] setPlayerPosition(int x, int y) {
 		
-		if(level == null) return;
+		int playerX, playerY;
+		
+		// 40 in this context is width and height of the tiles
+		
+		x-=880;
+		y-=120;
+		
+		playerX=x-x%40;
+		playerY=y-y%40;
+		
+		playerX/=40;
+		playerY/=40;
+		
+		return adjacentTiles(playerX, playerY);
+	}
+	
+	private static Enviorment[] adjacentTiles(int playerX, int playerY) {
+		
+		Enviorment[] tiles = new Enviorment[4];
+		
+		if(level == null) return tiles;
 		
 		// 20 in this context is how many tiles wide the screen is
 		int rowLength = 23;
@@ -91,10 +115,11 @@ public class playerLevelManagerMediator {
 		if(down == -1) tiles[2] = null;
 		if(left == -1) tiles[3] = null;
 		
+		return tiles;
 	}
 	
 	// Returns walkability for each of the four adjacent tiles.
-	public boolean canMoveTo(String direction) {
+	public static boolean canMoveTo(String direction, Enviorment[] tiles) {
 		switch(direction) {
 		case "UP":
 			if(tiles[0]!=null) return tiles[0].getCanBeWalkedOn();
@@ -110,10 +135,6 @@ public class playerLevelManagerMediator {
 			return false;
 		}
 		return false;
-	}
-	
-	public int getRow() {
-		return playerY+1;
 	}
 	
 	public boolean isTileWalkable(int x, int y) {

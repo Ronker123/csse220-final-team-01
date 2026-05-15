@@ -12,30 +12,29 @@ import java.util.Arrays;
 public class Player {
     private int x, y;
     private int tarX, tarY;
+    private Enviorment[] adjTiles;
     private int speed = 5;
     private int frameCount = 0;
     private ArrayList<State> theNoNos = new ArrayList<>(Arrays.asList(State.MAINMENU, State.PAUSED));
     
     private State state;
     
-    private playerLevelManagerMediator mediator;
     private KeyHandler keyH; 
     
     private BufferedImage sprite;
     private final int SPRITE_SIZE = 40; 
 
-    public Player(int startX, int startY, playerLevelManagerMediator mediator, KeyHandler keyH) {
+    public Player(int startX, int startY, KeyHandler keyH) {
         this.x = startX;
         this.y = startY;
         
         this.tarX = startX;
         this.tarY = startY;
         
-        this.mediator = mediator;
         this.keyH = keyH; 
         
         loadSprite();
-        this.mediator.setPlayerPosition(this.x, this.y);
+        adjTiles = playerLevelManagerMediator.setPlayerPosition(this.x, this.y);
     }
 
     private void loadSprite() {
@@ -57,7 +56,7 @@ public class Player {
             g2.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
         }
         
-        mediator.drawForeGroundTiles(g2);
+        playerLevelManagerMediator.drawForeGroundTiles(g2, x, y);
     }
 
     public int getX() { return x; }
@@ -69,7 +68,7 @@ public class Player {
     	this.state = state;
     	
     	if (!theNoNos.contains(state)) {
-    	mediator.setPlayerPosition(this.tarX, this.tarY);
+    	adjTiles = playerLevelManagerMediator.setPlayerPosition(this.tarX, this.tarY);
     	
     	moveToTarget();
     	setTargetPos();
@@ -89,19 +88,19 @@ public class Player {
 		if(frameCount != 1 && frameCount < 15) return;
 		if(frameCount%8 != 1) return;
 		
-		if(keyH.keys[KeyEvent.VK_W] && mediator.canMoveTo("UP")) {
+		if(keyH.keys[KeyEvent.VK_W] && playerLevelManagerMediator.canMoveTo("UP", adjTiles)) {
 			tarY-=40;
 			return;
 		}
-		if(keyH.keys[KeyEvent.VK_D] && mediator.canMoveTo("RIGHT")) {
+		if(keyH.keys[KeyEvent.VK_D] && playerLevelManagerMediator.canMoveTo("RIGHT", adjTiles)) {
 			tarX+=40;
 			return;
 		}
-		if(keyH.keys[KeyEvent.VK_S] && mediator.canMoveTo("DOWN")) {
+		if(keyH.keys[KeyEvent.VK_S] && playerLevelManagerMediator.canMoveTo("DOWN", adjTiles)) {
 			tarY+=40;
 			return;
 		}
-		if(keyH.keys[KeyEvent.VK_A] && mediator.canMoveTo("LEFT")) {
+		if(keyH.keys[KeyEvent.VK_A] && playerLevelManagerMediator.canMoveTo("LEFT", adjTiles)) {
 			tarX-=40;
 			return;
 		}

@@ -14,10 +14,9 @@ public class LevelManager {
 	private ArrayList<Level> levels = new ArrayList<>();
 	private Level currentDisplayLevel;
 	private State currentState;
-	private playerLevelManagerMediator plmm;
 	private Menu menu;
 	
-	public LevelManager(playerLevelManagerMediator plmm, MouseHandler mb) {
+	public LevelManager(MouseHandler mb) {
 		File levelStorage = new File("LevelStorage.txt");		
 		try (Scanner lvlScanner = new Scanner(levelStorage)){
 			while (lvlScanner.hasNextLine()) {
@@ -28,8 +27,6 @@ public class LevelManager {
 		        levels.add(new Level(parseData(data), levelState));
 		      }
 		} catch(Exception e) {System.out.println(e);}
-		
-		this.plmm = plmm;
 		
 		menu = new Menu(mb);
 	}
@@ -44,11 +41,11 @@ public class LevelManager {
 			menu.update(state);
 			levels.forEach(n -> {if(n.getState()==state){
 				currentDisplayLevel=n;
-				plmm.setLevel(currentDisplayLevel);
+				playerLevelManagerMediator.setLevel(currentDisplayLevel);
 			}
 			else if(state == State.MAINMENU){
 				currentDisplayLevel = null;
-				plmm.setLevel(currentDisplayLevel);
+				playerLevelManagerMediator.setLevel(currentDisplayLevel);
 			}});
 			currentState=state;
 		}

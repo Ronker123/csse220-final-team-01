@@ -99,7 +99,7 @@ public class Menu {
 		this.l1 = new Button("1", 50, 200, 5, 64, 183162122, l1Action);
 		this.menu  = new Button("Menu", 50, 300, 5, 64, 183162122, menuAction);
 		this.pause = new Button("Pause Game", 50, 400, 5, 64, 183162122, pauseAction);
-		this.play = new Button("Play", 370, 354, 5, 64, 183162122, pauseAction);
+		this.play = new Button("Play", 370, 354, 5, 64, 183162122, l1Action);
 		this.nextLevel = new Button("Next Level", 50, 500, 5, 64, 183162122, nextLevelAction);
 		this.mute = new Button("Mute Music", 300, 100, 5, 64, 183162122, nextLevelAction);
 		this.muteGame = new Button("Mute Music", 300, 200, 5, 64, 183162122, nextLevelAction);
@@ -116,7 +116,10 @@ public class Menu {
 		case MAINMENU:
 			
 			exit.setSelectable(true);
-			l1.setSelectable(true);
+			play.setSelectable(true);
+			settings.setSelectable(true);
+			statistics.setSelectable(true);
+			credits.setSelectable(true);
 			
 			pause.setSelectable(false);
 			menu.setSelectable(false);
@@ -142,12 +145,15 @@ public class Menu {
 			pause.setSelectable(true);
 			
 			exit.setSelectable(false);
-			l1.setSelectable(false);
+			play.setSelectable(false);
+			settings.setSelectable(false);
+			statistics.setSelectable(false);
+			credits.setSelectable(false);
 			
-//			buttons[0] = menu;
-//			buttons[1] = nextLevel;
-//			buttons[2] = pause;
-//			buttons[3] = null;
+			buttons[0] = menu;
+			buttons[1] = nextLevel;
+			buttons[2] = pause;
+			buttons[3] = null;
 			break;
 		}
 	}

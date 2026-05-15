@@ -29,6 +29,7 @@ public class Level {
 			for(int i=-1; i<2; i++) {
 			if((tile.getId() == layer*23+23+x+i || tile.getId() == layer*23+x+i) && !tile.getCanBeWalkedOn()) {
 				tile.draw(g2);
+//				System.out.println(tile.getId());
 			}
 			}
 		}
