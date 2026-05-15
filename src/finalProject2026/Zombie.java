@@ -3,16 +3,21 @@ package finalProject2026;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Zombie {
     private int x, y;
-    private int speed = 5;
+    private int speed = 2; 
     private playerLevelManagerMediator mediator;
     
     private BufferedImage sprite;
     private final int SPRITE_SIZE = 40; 
+
+    // Logic variables for random movement
+    private String currentDirection = "DOWN";
+    private int moveTimer = 0;
+    private Random rand = new Random();
 
     public Zombie(int startX, int startY, playerLevelManagerMediator mediator) {
         this.x = startX;
@@ -20,15 +25,15 @@ public class Zombie {
         this.mediator = mediator;
         
         loadSprite();
+        // Initialize the mediator's tile awareness for the starting position
         this.mediator.setPlayerPosition(this.x, this.y);
     }
 
     private void loadSprite() {
         try {
-        	sprite = ImageIO.read(getClass().getResourceAsStream("/Zombie.png"));
+            sprite = ImageIO.read(getClass().getResourceAsStream("/Zombie.png"));
         } catch (IOException e) {
-            System.out.println("Error: Could not find player sprite file.");
-            e.printStackTrace();
+            System.out.println("Error: Could not find zombie sprite file.");
         }
     }
 
@@ -40,45 +45,45 @@ public class Zombie {
         }
     }
 
-    public void move(String direction) {
-        
-        switch (direction.toUpperCase()) {
-            case "UP":
-                if (mediator.canGoUP()) y -= speed;
-                break;
-            case "DOWN":
-                if (mediator.canGoDown()) y += speed;
-                break;
-            case "LEFT":
-                if (mediator.canGoLeft()) x -= speed;
-                break;
-            case "RIGHT":
-                if (mediator.canGoRight()) x += speed;
-                break;
+    public void update() {
+        // Synchronize the mediator with the zombie's current position
+        mediator.setPlayerPosition(this.x, this.y);
+
+        // Decide a new direction if the timer is up OR if we hit a wall
+        if (moveTimer <= 0 || !mediator.canMoveTo(currentDirection)) {
+            currentDirection = pickRandomDirection();
+            moveTimer = 30 + rand.nextInt(60); // Stay on this path for 0.5 to 1.5 seconds
         }
 
-        mediator.setPlayerPosition(this.x, this.y);
+        // Perform the move
+        move(currentDirection);
+
+        moveTimer--;
+    }
+
+    public void move(String direction) {
+        // Only update coordinates if the mediator says the adjacent tile is walkable
+        switch (direction.toUpperCase()) {
+            case "UP":
+                if (mediator.canMoveTo("UP")) y -= speed;
+                break;
+            case "DOWN":
+                if (mediator.canMoveTo("DOWN")) y += speed;
+                break;
+            case "LEFT":
+                if (mediator.canMoveTo("LEFT")) x -= speed;
+                break;
+            case "RIGHT":
+                if (mediator.canMoveTo("RIGHT")) x += speed;
+                break;
+        }
+    }
+
+    private String pickRandomDirection() {
+        String[] directions = {"UP", "DOWN", "LEFT", "RIGHT"};
+        return directions[rand.nextInt(4)];
     }
 
     public int getX() { return x; }
     public int getY() { return y; }
-
-    public void update() {
-
-//        if (mediator.canGoUP()) {
-//            this.y -= speed;
-//        } 
-//        else if (mediator.canGoDown()) {
-//            this.y += speed;
-//        }
-//        
-//        if (mediator.canGoLeft()) {
-//            this.x -= speed;
-//        } 
-//        else if (mediator.canGoRight()) {
-//            this.x += speed;
-//        }
-
-//        mediator.setPlayerPosition(this.x, this.y);
-    }
 }

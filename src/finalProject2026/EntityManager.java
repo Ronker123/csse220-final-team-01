@@ -19,10 +19,23 @@ public class EntityManager {
 	    this.KH = KH; 
 	    
 	    this.player = new Player(40, 0, this.plmm, KH); 
-//	    this.zombie = new Zombie(50, 20, this.plmm);
+	    
+	    int startX, startY;
+	    boolean isSafe = false;
+	    java.util.Random rand = new java.util.Random();
+
+	    do {
+	        startX = rand.nextInt(20) * 40; // Pick a random column (0-19)
+	        startY = rand.nextInt(15) * 40; // Pick a random row 
+	        
+	        isSafe = plmm.isTileWalkable(startX, startY);
+	    } while (!isSafe); // Keep looking until we find an empty tile
+
+	    this.zombie = new Zombie(startX, startY, this.plmm);
+	}
 //	    this.coin = new Coin(100, 100, this.plmm);
 //	    this.exit = new Exit(300, 300, this.plmm);
-	}
+	
 
 	public void update(State state) {
 	    if (player != null) {
@@ -47,6 +60,6 @@ public class EntityManager {
         if (exit != null) {
             exit.draw(g2); 
         }
-
+        
     }
 }

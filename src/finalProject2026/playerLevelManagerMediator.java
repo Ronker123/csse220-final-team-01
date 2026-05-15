@@ -111,5 +111,22 @@ public class playerLevelManagerMediator {
 	public int getRow() {
 		return playerY+1;
 	}
+	
+	public boolean isTileWalkable(int x, int y) {
+	    if (level == null) return false;
+	    
+	    // Snap the requested coordinates to grid
+	    int gridX = x / 40;
+	    int gridY = y / 40;
+	    int targetId = gridX + (gridY * 20); 
+
+	    // Scan level tiles to see if this ID is walkable
+	    for (int i = 0; i < level.getEnviormentSize(); i++) {
+	        if (level.getTile(i).getId() == targetId) {
+	            return level.getTile(i).getCanBeWalkedOn();
+	        }
+	    }
+	    return false;
+	}
 }
 	
