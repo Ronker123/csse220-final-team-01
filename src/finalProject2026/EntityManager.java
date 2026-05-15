@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 public class EntityManager {
     
     private State state;
-    private playerLevelManagerMediator plmm;
     private KeyHandler KH; 
     
     private Player player;
@@ -13,12 +12,11 @@ public class EntityManager {
 	private Coin coin;
 	private Exit exit;
     
-	public EntityManager(State state, playerLevelManagerMediator plmm, KeyHandler KH) {
+	public EntityManager(State state, KeyHandler KH) {
 	    this.state = state;
-	    this.plmm = plmm;
 	    this.KH = KH; 
 	    
-	    this.player = new Player(40, 0, this.plmm, KH); 
+	    this.player = new Player(920, 160, KH); 
 	    
 //	    int startX, startY;
 //	    boolean isSafe = false;
@@ -31,8 +29,8 @@ public class EntityManager {
 //	        isSafe = plmm.isTileWalkable(startX, startY);
 //	    } while (!isSafe); // Keep looking until we find an empty tile
 
-	    this.zombie = new Zombie(40, 200, this.plmm);
-	    this.coin = new Coin(200, 100, this.plmm);
+//	    this.zombie = new Zombie(40, 200, this.plmm);
+//	    this.coin = new Coin(200, 100, this.plmm);
 //	    this.exit = new Exit(300, 300, this.plmm);
 	}
 
