@@ -6,12 +6,17 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player {
     private int x, y;
     private int tarX, tarY;
     private int speed = 5;
     private int frameCount = 0;
+    private ArrayList<State> theNoNos = new ArrayList<>(Arrays.asList(State.MAINMENU, State.PAUSED));
+    
+    private State state;
     
     private playerLevelManagerMediator mediator;
     private KeyHandler keyH; 
@@ -43,6 +48,9 @@ public class Player {
     }
 
     public void draw(Graphics2D g2) {
+    	
+    	if(state == State.MAINMENU) return;
+    	
         if (sprite != null) {
             g2.drawImage(sprite, x, y, SPRITE_SIZE, SPRITE_SIZE, null);
         } else {
@@ -55,13 +63,17 @@ public class Player {
     public int getX() { return x; }
     public int getY() { return y; }
 
-    public void update() {
+    public void update(State state) {
     	if (keyH == null) return;
-
+    	
+    	this.state = state;
+    	
+    	if (!theNoNos.contains(state)) {
     	mediator.setPlayerPosition(this.tarX, this.tarY);
     	
     	moveToTarget();
     	setTargetPos();
+    	}
     }
     
     private void moveToTarget() {

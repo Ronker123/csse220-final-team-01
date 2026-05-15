@@ -15,12 +15,16 @@ public class playerLevelManagerMediator {
 	}
 	
 	public void drawForeGroundTiles(Graphics2D g2) {
-		level.drawFGTiles(g2, playerY+1);
+		if(level == null)return;
+		
+		level.drawFGTiles(g2, playerY+1, playerX);
 	}
 	
 	public void setPlayerPosition(int x, int y) {
-		
 		// 40 in this context is width and height of the tiles
+		
+		x-=880;
+		y-=120;
 		
 		playerX=x-x%40;
 		playerY=y-y%40;
@@ -36,24 +40,24 @@ public class playerLevelManagerMediator {
 		if(level == null) return;
 		
 		// 20 in this context is how many tiles wide the screen is
-		
+		int rowLength = 23;
 		
 		// Each of these evaluate where the adjacent tile is based on the fact that each level has a long list of the tiles
 		int up =
-				playerX+(playerY-1)*20 <= 0 ? -1 :
-				playerX+(playerY-1)*20;
+				playerX+(playerY-1)*rowLength < 0 ? -1 :
+				playerX+(playerY-1)*rowLength;
 		
 		int right =
-				playerX+1+playerY*20 <= (playerY-1)*20 ? -1 :
-				playerX+1+playerY*20;
+				playerX+1+playerY*rowLength >= (playerY+1)*rowLength ? -1 :
+				playerX+1+playerY*rowLength;
 				
 		int down =
-				playerX+(playerY+1)*20 >= level.getEnviormentSize() ? -1 :
-				playerX+(playerY+1)*20;
+				playerX+(playerY+1)*rowLength >= level.getEnviormentSize() ? -1 :
+				playerX+(playerY+1)*rowLength;
 				
 		int left =
-				playerX-1+playerY*20 >= (playerY+1)*20 ? -1 :
-				playerX-1+playerY*20;
+				playerX-1+playerY*rowLength < (playerY)*rowLength ? -1 :
+				playerX-1+playerY*rowLength;
 		
 		
 		// Goes through the list of tiles to identify the correct one based on the id of the tile and assigns it a designated

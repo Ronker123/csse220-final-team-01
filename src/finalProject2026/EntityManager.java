@@ -38,7 +38,7 @@ public class EntityManager {
 
 	public void update(State state) {
 	    if (player != null) {
-	        player.update(); 
+	        player.update(state); 
 	    }
 	    
 	    if (zombie != null) { 
