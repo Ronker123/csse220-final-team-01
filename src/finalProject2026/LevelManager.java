@@ -24,6 +24,7 @@ public class LevelManager {
 		        String data = lvlScanner.nextLine();
 		        String[] dataArray = data.splitWithDelimiters("/s",-1);
 		        State levelState = toState(dataArray[2]);
+		        System.out.println(levelState);
 		        levels.add(new Level(parseData(data), levelState));
 		      }
 		} catch(Exception e) {System.out.println(e);}
@@ -45,7 +46,7 @@ public class LevelManager {
 				currentDisplayLevel=n;
 				plmm.setLevel(currentDisplayLevel);
 			}
-			else{
+			else if(state == State.MAINMENU){
 				currentDisplayLevel = null;
 				plmm.setLevel(currentDisplayLevel);
 			}});
@@ -95,6 +96,22 @@ public class LevelManager {
 			return State.LEVELONE;
 		case "LEVELTWO":
 			return State.LEVELTWO;
+		case "LEVELTHREE":
+			return State.LEVELTHREE;
+		case "LEVELFOUR":
+			return State.LEVELFOUR;
+		case "LEVELFIVE":
+			return State.LEVELFIVE;
+		case "LEVELSIX":
+			return State.LEVELSIX;
+		case "LEVELSEVEN":
+			return State.LEVELSEVEN;
+		case "LEVELEIGHT":
+			return State.LEVELEIGHT;
+		case "LEVELNINE":
+			return State.LEVELNINE;
+		case "LEVELTEN":
+			return State.LEVELTEN;
 		}
 	System.out.println("State: "+data+" does not exist. Thrown from LevelManager.java ln 66");
 	System.exit(0);

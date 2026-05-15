@@ -23,7 +23,7 @@ public class Display extends JPanel implements Runnable {
         this.setFocusable(true);
         this.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
 //      this.setPreferredSize(new Dimension(800, 600));
-//		this.setBackground(new Color(74, 100, 74));
+		this.setBackground(Color.BLACK);
 		
         this.gameState = new GameState(mb);
         this.entities = new Entities(this.gameState, kb); 

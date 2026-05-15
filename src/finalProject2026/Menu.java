@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 public class Menu {
 	
 	private BufferedImage menuDisplay;
+	private int decisionInt = 1;
 	private Button[] buttons;
 	private MouseHandler mb;
 	private State state;
@@ -24,7 +25,7 @@ public class Menu {
 	private Button l1;
 	private Button menu;
 	private Button pause;
-	
+	private Button nextLevel;	
 	
 	private final Action exitAction = () -> {
 		boolean clicked = mb.buttons[0];
@@ -52,23 +53,38 @@ public class Menu {
 		else setNewState(null);
 	};
 	
+	private final Action nextLevelAction = () -> {
+		boolean clicked = mb.buttons[0];
+		boolean depricated = mb.depricated[0];
+		if(clicked && !depricated) {
+			decisionInt+= decisionInt != 10 ? 1 : -9;
+			setNewState(State.values()[decisionInt]);
+			mb.depricated[0] = true;
+		}
+		else setNewState(null);
+	};
+	
 	public Menu(MouseHandler mb) {
 		
 		this.mb = mb;
 		
 		try {
 			if(new Dimension(1920, 1080).equals(Toolkit.getDefaultToolkit().getScreenSize())) {
-				menuDisplay = ImageIO.read(getClass().getResource("menu1920x1080.png"));
+				BufferedImage base = ImageIO.read(getClass().getResource("menu1920x1080.png"));
+				menuDisplay = base.getSubimage(192*3, 0, 192, 108);
 			}
 		}
 		catch(Exception e) {System.out.println(e);}
 		
 		buttons = new Button[4];
 		
-		this.exit = new Button("EXIT", 100, 100, 5, 64, 74255255, exitAction);
-		this.l1 = new Button("Level One", 50, 200, 5, 64, 74255255, l1Action);
-		this.menu  = new Button("Return to Menu", 100, 100, 5, 64, 74255255, menuAction);
-		this.pause = new Button("Pause", 50, 300, 5, 64, 74255255, exitAction);
+//		decision = menuDisplayOptions[3];
+		
+		this.exit = new Button("EXIT", 100, 100, 5, 64, 183162122, exitAction);
+		this.l1 = new Button("Level One", 50, 200, 5, 64, 183162122, l1Action);
+		this.menu  = new Button("Return to Menu", 100, 100, 5, 64, 183162122, menuAction);
+		this.pause = new Button("Pause", 50, 300, 5, 64, 183162122, exitAction);
+		this.nextLevel = new Button("Next Level", 50, 200, 5, 64, 183162122, nextLevelAction);
 		
 		}
 		
@@ -82,6 +98,7 @@ public class Menu {
 			pause.setSelectable(true);
 			
 			menu.setSelectable(false);
+			nextLevel.setSelectable(false);
 			
 			buttons[0] = exit;
 			buttons[1] = l1;
@@ -91,13 +108,14 @@ public class Menu {
 		default:
 			
 			menu.setSelectable(true);
+			nextLevel.setSelectable(true);
 			
 			exit.setSelectable(false);
 			l1.setSelectable(false);
 			pause.setSelectable(false);
 			
 			buttons[0] = menu;
-			buttons[1] = null;
+			buttons[1] = nextLevel;
 			buttons[2] = null;
 			buttons[3] = null;
 			break;
@@ -106,6 +124,7 @@ public class Menu {
 	
 	public void draw(Graphics2D g2) {
 		g2.drawImage(menuDisplay, 0, 0, 1920, 1080, null);
+		Color oc = g2.getColor();
 		
 		for(Button button : buttons) {
 			if(button == null) continue;
@@ -188,7 +207,7 @@ class Button {
 		
 		boolean selected = selected();
 		
-		if(selected && selectable) {g2.rotate(Math.toRadians(10), point[0], point[1]);}
+		if(selected && selectable) {g2.rotate(Math.toRadians(3), point[0], point[1]);}
 		g2.setColor(color1);
 		g2.fillRect(x-10, y-height/2-20, width+20, height);
 		
@@ -200,7 +219,7 @@ class Button {
 		g2.setFont(oldFont);
 		g2.setStroke(oldStroke);
 		g2.setColor(oldColor);
-		if(selected && selectable) {g2.rotate(Math.toRadians(-10), point[0], point[1]);}
+		if(selected && selectable) {g2.rotate(Math.toRadians(-3), point[0], point[1]);}
 	}
 	
 	private boolean selected() {

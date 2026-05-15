@@ -24,10 +24,12 @@ public class Level {
 		}
 	}
 	
-	public void drawFGTiles(Graphics2D g2, int layer) {
+	public void drawFGTiles(Graphics2D g2, int layer, int x) {
 		for(Enviorment tile : tiles) {
-			if(tile.getId() >= layer*23 && tile.getId() < layer*24 && !tile.getCanBeWalkedOn()) {
+			for(int i=-1; i<2; i++) {
+			if((tile.getId() == layer*23+23+x+i || tile.getId() == layer*23+x+i) && !tile.getCanBeWalkedOn()) {
 				tile.draw(g2);
+			}
 			}
 		}
 	}
