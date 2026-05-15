@@ -4,42 +4,42 @@ import java.awt.Graphics2D;
 
 public class playerLevelManagerMediator {
 	
-	private Level level;
-	private int playerX;
-	private int playerY=4;
-	private Enviorment[] tiles = new Enviorment[4];
+	private static Level level;
+//	private int playerX;
+//	private int playerY=4;
+	private static Enviorment[] tiles = new Enviorment[4];
 	private boolean drawPlayer = false;
 	
-	public void setLevel(Level level) {
-		this.level = level;
+	public static void setLevel(Level level) {
+		playerLevelManagerMediator.level = level;
 	}
 	
-	public void drawForeGroundTiles(Graphics2D g2) {
-		if(level == null)return;
+	public static void drawForeGroundTiles(Graphics2D g2, int playerY, int playerX) {
 		
-		level.drawFGTiles(g2, playerY+1, playerX);
+		if (level == null) {
+	        return; 
+	    }
+		
+	    if (level != null) {
+	        level.drawFGTiles(g2, playerY, playerX);
+	    }
 	}
 	
-	public void setPlayerPosition(int x, int y) {
+	public static void setPlayerPosition(int x, int y) {
+		
 		// 40 in this context is width and height of the tiles
 		
 		x-=880;
 		y-=120;
-		
-		playerX=x-x%40;
-		playerY=y-y%40;
-		
-		playerX/=40;
-		playerY/=40;
-		
-		adjacentTiles();
+		adjacentTiles(x, y);
 	}
 	
-	private void adjacentTiles() {
+	private static void adjacentTiles(int playerX, int playerY) {
 		
 		if(level == null) return;
+	
 		
-		// 20 in this context is how many tiles wide the screen is
+		// 23 in this context is how many tiles wide the screen is
 		int rowLength = 23;
 		
 		// Each of these evaluate where the adjacent tile is based on the fact that each level has a long list of the tiles
@@ -94,7 +94,7 @@ public class playerLevelManagerMediator {
 	}
 	
 	// Returns walkability for each of the four adjacent tiles.
-	public boolean canMoveTo(String direction) {
+	public static boolean canMoveTo(String direction) {
 		switch(direction) {
 		case "UP":
 			if(tiles[0]!=null) return tiles[0].getCanBeWalkedOn();
@@ -112,11 +112,8 @@ public class playerLevelManagerMediator {
 		return false;
 	}
 	
-	public int getRow() {
-		return playerY+1;
-	}
 	
-	public boolean isTileWalkable(int x, int y) {
+	public static boolean isTileWalkable(int x, int y) {
 	    if (level == null) return false;
 	    
 	    // Snap the requested coordinates to grid

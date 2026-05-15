@@ -35,7 +35,7 @@ public class Player {
         this.keyH = keyH; 
         
         loadSprite();
-        this.mediator.setPlayerPosition(this.x, this.y);
+        playerLevelManagerMediator.setPlayerPosition(this.x, this.y);
     }
 
     private void loadSprite() {
@@ -57,7 +57,7 @@ public class Player {
             g2.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
         }
         
-        mediator.drawForeGroundTiles(g2);
+        playerLevelManagerMediator.drawForeGroundTiles(g2, SPRITE_SIZE, SPRITE_SIZE);
     }
 
     public int getX() { return x; }
@@ -69,7 +69,7 @@ public class Player {
     	this.state = state;
     	
     	if (!theNoNos.contains(state)) {
-    	mediator.setPlayerPosition(this.tarX, this.tarY);
+    	playerLevelManagerMediator.setPlayerPosition(this.tarX, this.tarY);
     	
     	moveToTarget();
     	setTargetPos();
@@ -89,19 +89,19 @@ public class Player {
 		if(frameCount != 1 && frameCount < 15) return;
 		if(frameCount%8 != 1) return;
 		
-		if(keyH.keys[KeyEvent.VK_W] && mediator.canMoveTo("UP")) {
+		if(keyH.keys[KeyEvent.VK_W] && playerLevelManagerMediator.canMoveTo("UP")) {
 			tarY-=40;
 			return;
 		}
-		if(keyH.keys[KeyEvent.VK_D] && mediator.canMoveTo("RIGHT")) {
+		if(keyH.keys[KeyEvent.VK_D] && playerLevelManagerMediator.canMoveTo("RIGHT")) {
 			tarX+=40;
 			return;
 		}
-		if(keyH.keys[KeyEvent.VK_S] && mediator.canMoveTo("DOWN")) {
+		if(keyH.keys[KeyEvent.VK_S] && playerLevelManagerMediator.canMoveTo("DOWN")) {
 			tarY+=40;
 			return;
 		}
-		if(keyH.keys[KeyEvent.VK_A] && mediator.canMoveTo("LEFT")) {
+		if(keyH.keys[KeyEvent.VK_A] && playerLevelManagerMediator.canMoveTo("LEFT")) {
 			tarX-=40;
 			return;
 		}
