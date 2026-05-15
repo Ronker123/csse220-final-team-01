@@ -1,89 +1,102 @@
 package finalProject2026;
 
-import java.awt.Graphics;
+import java.awt.event.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
 public class Zombie {
     private int x, y;
-    private int speed = 2; 
+    private int tarX, tarY;
+    private int speed = 5;
+    private int frameCount = 0;
+    
     private playerLevelManagerMediator mediator;
+    private Random random = new Random();
     
     private BufferedImage sprite;
     private final int SPRITE_SIZE = 40; 
 
-    // Logic variables for random movement
-    private String currentDirection = "DOWN";
-    private int moveTimer = 0;
-    private Random rand = new Random();
-
     public Zombie(int startX, int startY, playerLevelManagerMediator mediator) {
         this.x = startX;
         this.y = startY;
+        
+        this.tarX = startX;
+        this.tarY = startY;
+        
         this.mediator = mediator;
         
         loadSprite();
-        // Initialize the mediator's tile awareness for the starting position
         this.mediator.setPlayerPosition(this.x, this.y);
     }
 
     private void loadSprite() {
         try {
-            sprite = ImageIO.read(getClass().getResourceAsStream("/Zombie.png"));
+        	sprite = ImageIO.read(getClass().getResourceAsStream("/Zombie.png"));
         } catch (IOException e) {
-            System.out.println("Error: Could not find zombie sprite file.");
+            System.out.println("Error: Could not find player sprite file.");
+            e.printStackTrace();
         }
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics2D g2) {
         if (sprite != null) {
-            g.drawImage(sprite, x, y, SPRITE_SIZE, SPRITE_SIZE, null);
+            g2.drawImage(sprite, x, y, SPRITE_SIZE, SPRITE_SIZE, null);
         } else {
-            g.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
+            g2.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
         }
-    }
-
-    public void update() {
-        // Synchronize the mediator with the zombie's current position
-        mediator.setPlayerPosition(this.x, this.y);
-
-        // Decide a new direction if the timer is up OR if we hit a wall
-        if (moveTimer <= 0 || !mediator.canMoveTo(currentDirection)) {
-            currentDirection = pickRandomDirection();
-            moveTimer = 30 + rand.nextInt(60); // Stay on this path for 0.5 to 1.5 seconds
-        }
-
-        // Perform the move
-        move(currentDirection);
-
-        moveTimer--;
-    }
-
-    public void move(String direction) {
-        // Only update coordinates if the mediator says the adjacent tile is walkable
-        switch (direction.toUpperCase()) {
-            case "UP":
-                if (mediator.canMoveTo("UP")) y -= speed;
-                break;
-            case "DOWN":
-                if (mediator.canMoveTo("DOWN")) y += speed;
-                break;
-            case "LEFT":
-                if (mediator.canMoveTo("LEFT")) x -= speed;
-                break;
-            case "RIGHT":
-                if (mediator.canMoveTo("RIGHT")) x += speed;
-                break;
-        }
-    }
-
-    private String pickRandomDirection() {
-        String[] directions = {"UP", "DOWN", "LEFT", "RIGHT"};
-        return directions[rand.nextInt(4)];
+        
+        mediator.drawForeGroundTiles(g2);
     }
 
     public int getX() { return x; }
     public int getY() { return y; }
-}
+
+    public void update() {
+        // Update the mediator with the intended destination for collision
+        mediator.setPlayerPosition(this.tarX, this.tarY);
+        
+        moveToTarget();
+        setTargetPos();
+    }
+    
+    private void moveToTarget() {
+		x += x < tarX ? 5 : 0;
+		x -= x > tarX ? 5 : 0;
+		y -= y > tarY ? 5 : 0;
+		y += y < tarY ? 5 : 0;
+	}
+    
+    private void setTargetPos() {
+        frameCount++;
+        
+        if(frameCount != 1 && frameCount < 15) return;
+        if(frameCount % 8 != 1) return;
+        
+        if (x == tarX && y == tarY) {
+            int direction = random.nextInt(4); 
+            
+            switch (direction) {
+                case 0: // UP
+                    if (mediator.canMoveTo("UP")) tarY -= 40;
+                    break;
+                case 1: // RIGHT
+                    if (mediator.canMoveTo("RIGHT")) tarX += 40;
+                    break;
+                case 2: // DOWN
+                    if (mediator.canMoveTo("DOWN")) tarY += 40;
+                    break;
+                case 3: // LEFT
+                    if (mediator.canMoveTo("LEFT")) tarX -= 40;
+                    break;
+            }
+        }
+        
+        // Reset frameCount if a move was attempted or to keep the loop going
+        if (frameCount > 30) frameCount = 0; 
+    }
+    
+   }
