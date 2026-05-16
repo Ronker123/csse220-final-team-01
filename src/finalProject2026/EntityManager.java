@@ -29,8 +29,14 @@ public class EntityManager {
 //	        isSafe = plmm.isTileWalkable(startX, startY);
 //	    } while (!isSafe); // Keep looking until we find an empty tile
 
-	    this.zombie = new Zombie(920, 920, this.plmm);
-	    this.coin = new Coin(200, 100, this.plmm);
+	    this.zombie = new Zombie(920, 920, this.player);
+	    this.coin = new Coin(1080, 160, this.player);
+	    this.coin = new Coin(1000, 160, this.player);
+	    this.coin = new Coin(1120, 160, this.player);
+	    this.coin = new Coin(1120, 240, this.player);
+	    this.coin = new Coin(1120, 280, this.player);
+	    this.coin = new Coin(1120, 320, this.player);
+	    this.coin = new Coin(1120, 360, this.player);
 //	    this.exit = new Exit(300, 300, this.plmm);
 	}
 
@@ -40,16 +46,11 @@ public class EntityManager {
 	    }
 	    
 	    if (zombie != null) { 
-	        zombie.update(); 
+	        zombie.update(state); 
 	    }
 	    
 	    if (coin != null) {
-            coin.update(player.getX(), player.getY());
-            
-            //Remove it from memory entirely once collected
-            if (coin.isCollected()) {
-                coin = null; 
-            }
+            coin.update(state);
 	    }
 	}
     
