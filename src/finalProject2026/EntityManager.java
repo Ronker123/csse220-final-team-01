@@ -1,71 +1,125 @@
 package finalProject2026;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.awt.Graphics2D;
 
 public class EntityManager {
     
-    private State state;
-    private KeyHandler KH; 
-    
+    private ArrayList<EntityGroup> entityGroups = new ArrayList<>();
+    private EntityGroup currentDisplayEntities;
+    private State currentState;
+    private KeyHandler keyH;
     private Player player;
-	private Zombie zombie;
-	private Coin coin;
-	private Exit exit;
-    
-	public EntityManager(State state, KeyHandler KH) {
-	    this.state = state;
-	    this.KH = KH; 
-	    
-	    this.player = new Player(920, 160, KH); 
-	    
-//	    int startX, startY;
-//	    boolean isSafe = false;
-//	    java.util.Random rand = new java.util.Random();
-//
-//	    do {
-//	        startX = rand.nextInt(20) * 40; // Pick a random column (0-19)
-//	        startY = rand.nextInt(15) * 40; // Pick a random row 
-//	        
-//	        isSafe = plmm.isTileWalkable(startX, startY);
-//	    } while (!isSafe); // Keep looking until we find an empty tile
 
-	    this.zombie = new Zombie(920, 920, this.plmm);
-	    this.coin = new Coin(200, 100, this.plmm);
-//	    this.exit = new Exit(300, 300, this.plmm);
-	}
+    public EntityManager(KeyHandler keyH) {
+        this.keyH = keyH;
+        loadEntities();
+    }
 
-	public void update(State state) {
-	    if (player != null) {
-	        player.update(state); 
-	    }
-	    
-	    if (zombie != null) { 
-	        zombie.update(); 
-	    }
-	    
-	    if (coin != null) {
-            coin.update(player.getX(), player.getY());
-            
-            //Remove it from memory entirely once collected
-            if (coin.isCollected()) {
-                coin = null; 
+    private void loadEntities() {
+        File levelStorage = new File("EntityStorage.txt");		
+		try (Scanner entScanner = new Scanner(levelStorage)){
+			while (entScanner.hasNextLine()) {
+		        String data = entScanner.nextLine();
+
+                if (data.contains("] ")) {
+                    data = data.split("] ")[1];
+                }
+
+                String[] stateParts = data.split("/s");
+                if (stateParts.length > 1) {
+                    State levelState = toState(stateParts[1]);
+                    entityGroups.add(new EntityGroup(parseEntities(data), levelState));
+                }
+		      }
+		} catch(Exception e) {System.out.println(e);}
+    }
+
+    public void update(State state) {
+        if (state != currentState) {
+            currentDisplayEntities = null;
+            for (EntityGroup group : entityGroups) {
+                if (group.getState() == state) {
+                    currentDisplayEntities = group;
+                    break;
+                }
             }
-	    }
-	}
-    
-    public void draw(Graphics2D g2) {
-        if (player != null) {
-            player.draw(g2);
-        }
-        if (zombie != null) {
-            zombie.draw(g2); 
-        }
-        if (coin != null) {
-            coin.draw(g2);
-        }
-        if (exit != null) {
-            exit.draw(g2); 
+            currentState = state;
         }
         
+        if (currentDisplayEntities != null) {
+            for (Object e : currentDisplayEntities.getEntities()) {
+                if (e instanceof Player) {
+                    player = (Player) e;
+                    ((Player) e).update(state);
+                }
+                if (e instanceof Zombie) {
+                    ((Zombie) e).update();
+                }
+                if (e instanceof Coin && player != null) {
+                    ((Coin) e).update(player.getX(), player.getY());
+                }
+                if (e instanceof Exit && player != null) {
+                    ((Exit) e).update(player);  // Pass player to exit for collision detection
+                }
+            }
+        }
+    }
+
+    public void draw(Graphics2D g2) {
+        if (currentDisplayEntities != null) {
+            for (Object e : currentDisplayEntities.getEntities()) {
+                if (e instanceof Player) ((Player) e).draw(g2);
+                if (e instanceof Zombie) ((Zombie) e).draw(g2);
+                if (e instanceof Coin) ((Coin) e).draw(g2);
+                if (e instanceof Exit) ((Exit) e).draw(g2);
+            }
+        }
+    }
+
+    private Object[] parseEntities(String data) {
+        String[] parts = data.split("/");
+        ArrayList<Object> entities = new ArrayList<>();
+
+        for (String part : parts) {
+            if (part.isEmpty() || part.startsWith("s") || part.equals("lf")) {
+                continue;
+            }
+
+            char typeCode = part.charAt(0);
+            String[] details = part.split("~");
+
+            if (details.length >= 3) {
+                try {
+                    int x = Integer.parseInt(details[1]);
+                    int y = Integer.parseInt(details[2]);
+                    
+                    Object e = createEntity(typeCode, x, y);
+                    if (e != null) entities.add(e);
+                } catch (NumberFormatException nfe) {
+                }
+            }
+        }
+        return entities.toArray();
+    }
+
+    private Object createEntity(char code, int x, int y) {
+        return switch (code) {
+            case 'p' -> new Player(x, y, keyH);
+            case 'z' -> new Zombie(x, y);
+            case 'c' -> new Coin(x, y);
+            case 'e' -> new Exit(x, y);
+            default -> null;
+        };
+    }
+
+    private State toState(String data) {
+        try {
+            return State.valueOf(data.toUpperCase().trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 }

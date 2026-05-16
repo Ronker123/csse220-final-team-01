@@ -1,17 +1,15 @@
 package finalProject2026;
 
-import java.awt.event.*;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
 public class Zombie {
     private int x, y;
     private int tarX, tarY;
-    private int speed = 5;
+    private Enviorment[] adjTiles;
     private int frameCount = 0;
     
     private Random random = new Random();
@@ -19,23 +17,23 @@ public class Zombie {
     private BufferedImage sprite;
     private final int SPRITE_SIZE = 40; 
 
-    public Zombie(int startX, int startY, playerLevelManagerMediator mediator) {
+    public Zombie(int startX, int startY) {
         this.x = startX;
         this.y = startY;
         
         this.tarX = startX;
         this.tarY = startY;
         
-        
         loadSprite();
-//        this.mediator.setPlayerPosition(this.x, this.y);
+        // Initialize adjacency tiles
+        adjTiles = playerLevelManagerMediator.setPlayerPosition(this.x, this.y);
     }
 
     private void loadSprite() {
         try {
-        	sprite = ImageIO.read(getClass().getResourceAsStream("/Zombie.png"));
+            sprite = ImageIO.read(getClass().getResourceAsStream("/Zombie.png"));
         } catch (IOException e) {
-            System.out.println("Error: Could not find player sprite file.");
+            System.out.println("Error: Could not find zombie sprite file.");
             e.printStackTrace();
         }
     }
@@ -44,57 +42,67 @@ public class Zombie {
         if (sprite != null) {
             g2.drawImage(sprite, x, y, SPRITE_SIZE, SPRITE_SIZE, null);
         } else {
+            g2.setColor(java.awt.Color.GREEN);
             g2.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
         }
-        
-        playerLevelManagerMediator.drawForeGroundTiles(g2, SPRITE_SIZE, SPRITE_SIZE);
     }
 
     public int getX() { return x; }
     public int getY() { return y; }
 
     public void update() {
-        // Update the mediator with the intended destination for collision
-        playerLevelManagerMediator.setPlayerPosition(this.tarX, this.tarY);
+        // Update adjacency tiles based on current target position
+        adjTiles = playerLevelManagerMediator.setPlayerPosition(this.tarX, this.tarY);
         
         moveToTarget();
         setTargetPos();
     }
     
     private void moveToTarget() {
-		x += x < tarX ? 5 : 0;
-		x -= x > tarX ? 5 : 0;
-		y -= y > tarY ? 5 : 0;
-		y += y < tarY ? 5 : 0;
-	}
+        if (x < tarX) x += 5;
+        if (x > tarX) x -= 5;
+        if (y < tarY) y += 5;
+        if (y > tarY) y -= 5;
+    }
     
     private void setTargetPos() {
         frameCount++;
         
-//        if(frameCount != 1 && frameCount < 15) return;
-//        if(frameCount % 8 != 1) return;
+        // Only attempt to choose new direction occasionally (every 30 frames)
+        if (frameCount < 30) return;
         
-        if (x == tarX && y == tarY) {
-            int direction = random.nextInt(4); 
+        // Check if we've reached the target
+        if (Math.abs(x - tarX) <= 5 && Math.abs(y - tarY) <= 5) {
+            int direction = random.nextInt(4);
+            int newTarX = tarX;
+            int newTarY = tarY;
             
             switch (direction) {
                 case 0: // UP
-                    if (playerLevelManagerMediator.canMoveTo("UP")) tarY -= 40;
+                    if (playerLevelManagerMediator.canMoveTo("UP", adjTiles)) 
+                        newTarY -= 40;
                     break;
                 case 1: // RIGHT
-                    if (playerLevelManagerMediator.canMoveTo("RIGHT")) tarX += 40;
+                    if (playerLevelManagerMediator.canMoveTo("RIGHT", adjTiles)) 
+                        newTarX += 40;
                     break;
                 case 2: // DOWN
-                    if (playerLevelManagerMediator.canMoveTo("DOWN")) tarY += 40;
+                    if (playerLevelManagerMediator.canMoveTo("DOWN", adjTiles)) 
+                        newTarY += 40;
                     break;
                 case 3: // LEFT
-                    if (playerLevelManagerMediator.canMoveTo("LEFT")) tarX -= 40;
+                    if (playerLevelManagerMediator.canMoveTo("LEFT", adjTiles)) 
+                        newTarX -= 40;
                     break;
+            }
+            
+            // Only update if the move is valid (coordinates changed)
+            if (newTarX != tarX || newTarY != tarY) {
+                tarX = newTarX;
+                tarY = newTarY;
             }
         }
         
-        // Reset frameCount if a move was attempted or to keep the loop going
-        if (frameCount > 30) frameCount = 0; 
+        frameCount = 0;
     }
-    
-   }
+}
