@@ -1,11 +1,9 @@
 package finalProject2026;
 
-import java.awt.event.*;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +12,7 @@ import java.util.Random;
 public class Zombie {
     private int x, y;
     private int tarX, tarY;
-    private int speed = 5;
+    private Enviorment[] adjTiles;
     private int frameCount = 0;
     private boolean hitPlayer;
     
@@ -46,14 +44,15 @@ public class Zombie {
         hitbox = new Rectangle(this.x, this.y, SPRITE_SIZE, SPRITE_SIZE);
         
         loadSprite();
-//        this.mediator.setPlayerPosition(this.x, this.y);
+        // Initialize adjacency tiles
+        adjTiles = playerLevelManagerMediator.setPlayerPosition(this.x, this.y);
     }
 
     private void loadSprite() {
         try {
-        	sprite = ImageIO.read(getClass().getResourceAsStream("/Zombie.png"));
+            sprite = ImageIO.read(getClass().getResourceAsStream("/Zombie.png"));
         } catch (IOException e) {
-            System.out.println("Error: Could not find player sprite file.");
+            System.out.println("Error: Could not find zombie sprite file.");
             e.printStackTrace();
         }
     }
@@ -66,6 +65,7 @@ public class Zombie {
             g2.drawImage(sprite, x, y, SPRITE_SIZE, SPRITE_SIZE, null);
             g2.draw(hitbox);
         } else {
+            g2.setColor(java.awt.Color.GREEN);
             g2.fillRect(x, y, SPRITE_SIZE, SPRITE_SIZE);
         }
         
@@ -105,8 +105,8 @@ public class Zombie {
     private void setTargetPos() {
         frameCount++;
         
-//        if(frameCount != 1 && frameCount < 15) return;
-//        if(frameCount % 8 != 1) return;
+        // Only attempt to choose new direction occasionally (every 30 frames)
+        if (frameCount < 30) return;
         
         int range = random.nextInt(30);
         int offSet = random.nextInt(30);
@@ -147,9 +147,14 @@ public class Zombie {
                     break;
             	}
             }
+            
+            // Only update if the move is valid (coordinates changed)
+            if (newTarX != tarX || newTarY != tarY) {
+                tarX = newTarX;
+                tarY = newTarY;
+            }
         }
         
         frameCount%=30;
     }
-    
-   }
+}

@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,9 +47,9 @@ public class Coin {
 
     private void loadSprite() {
         try {
-        	sprite = ImageIO.read(getClass().getResourceAsStream("/Coin.png"));
+            sprite = ImageIO.read(getClass().getResourceAsStream("/Coin.png"));
         } catch (IOException e) {
-            System.out.println("Error: Could not find player sprite file.");
+            System.out.println("Error: Could not find coin sprite file.");
             e.printStackTrace();
         }
     }
